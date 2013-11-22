@@ -1,6 +1,6 @@
 # Guard::Cmake
 
-TODO: Write a gem description
+Guard::Cmake automatically rebuilds c|c++ files when a modification occurs using cmake.
 
 ## Installation
 
