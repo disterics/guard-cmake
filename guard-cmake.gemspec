@@ -5,11 +5,11 @@ require 'guard/cmake/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "guard-cmake"
-  spec.version       = Guard::Cmake::VERSION
+  spec.version       = Guard::CMake::VERSION
   spec.authors       = ["disterics"]
   spec.email         = ["disterics@wojeshun.net"]
-  spec.description   = %q{Guard::Cmake automatically rebuilds c|c++ files when a modification occurs using cmake.}
-  spec.summary       = %q{Guard plugin for Cmake}
+  spec.description   = %q{Guard::CMake automatically rebuilds c|c++ files when a modification occurs using cmake.}
+  spec.summary       = %q{Guard plugin for CMake}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -19,7 +19,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'guard',     '~> 2.0'
+
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
+  spec.add_development_dependency "guard-rspec"
+  spec.add_development_dependency "ruby_gntp"
+
 end

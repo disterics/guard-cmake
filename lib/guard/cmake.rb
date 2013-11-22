@@ -1,7 +1,7 @@
 require "guard/cmake/version"
 
 module Guard
-  module Cmake
+  module CMake
     # Your code goes here...
   end
 end

@@ -1,6 +1,6 @@
-# Guard::Cmake
+# Guard::CMake
 
-Guard::Cmake automatically rebuilds c|c++ files when a modification occurs using cmake.
+Guard::CMake automatically rebuilds c|c++ files when a modification occurs using cmake.
 
 ## Installation
 
