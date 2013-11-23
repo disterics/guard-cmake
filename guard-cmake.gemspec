@@ -5,7 +5,7 @@ require 'guard/cmake/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "guard-cmake"
-  spec.version       = Guard::CMake::VERSION
+  spec.version       = Guard::CMakeVersion::VERSION
   spec.authors       = ["disterics"]
   spec.email         = ["disterics@wojeshun.net"]
   spec.description   = %q{Guard::CMake automatically rebuilds c|c++ files when a modification occurs using cmake.}

@@ -1,5 +1,5 @@
 module Guard
-  module CMake
+  module CMakeVersion
     VERSION = "0.0.1.pre"
   end
 end
