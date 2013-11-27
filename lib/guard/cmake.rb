@@ -20,9 +20,31 @@ module Guard
     def initialize(options = {})
       super
       @options = {
-        all_on_start: false
+        all_on_start: true,
+        build_dir: ['build']
       }.merge(options)
       @runner = Runner.new(@options)
+    end
+
+    # Called once when Guard starts. Please override initialize method to init stuff.
+    #
+    # @raise [:task_has_failed] when start has failed
+    # @return [Object] the task result
+    #
+    def start
+      ::Guard::UI.info("Guard::CMake #{Guard::CMakeVersion::VERSION} is running, with cmake!", reset: true)
+      run_all if @options[:all_on_start]
+    end
+
+    # Called when just `enter` is pressed
+    # This method should be principally used for long action like running all specs/tests/...
+    #
+    # @raise [:task_has_failed] when run_all has failed
+    # @return [Object] the task result
+    #
+    def run_all
+      build_dir = @options[:build_dir]
+      @runner.run(build_dir, message: "Building the whole project")
     end
 
   end

@@ -35,6 +35,22 @@ describe Guard::CMake do
       end
     end
 
+    context ":all_on_start option is false" do
+      subject { described_class.new(all_on_start: false) }
+
+      it "doesn't call #run_all" do
+        expect(subject).to_not receive(:run_all)
+
+        subject.start
+      end
+    end
+  end
+
+  describe '#run_all' do
+    it "runs cmake and make in the default :build_dir" do
+      expect(runner).to receive(:run).with(["build"], message: "Building the whole project")
+      subject.run_all
+    end
   end
 
 end
