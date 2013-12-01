@@ -20,8 +20,7 @@ module Guard
     def initialize(options = {})
       super
       @options = {
-        all_on_start: true,
-        build_dir: ['build']
+        all_on_start: true
       }.merge(options)
       @runner = Runner.new(@options)
     end
@@ -43,8 +42,13 @@ module Guard
     # @return [Object] the task result
     #
     def run_all
-      build_dir = @options[:build_dir]
-      @runner.run(build_dir, message: "Building the whole project")
+      _throw_if_failed { runner.run_all }
+    end
+
+    private
+
+    def _throw_if_failed
+      throw :task_has_failed unless yield
     end
 
   end

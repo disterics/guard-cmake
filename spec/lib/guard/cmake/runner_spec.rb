@@ -4,10 +4,17 @@ describe Guard::CMake::Runner do
 
   describe "#initialize" do
 
-    describe "sets the @runner instance variable from options" do
+    let(:default_options) { { out_of_src_build: true} }
+
+    context "with no options" do
       it "sets default options" do
         runner = described_class.new
-        expect(runner.instance_variable_get(:@options)[:all_on_start]).to be_false
+        expect(runner.instance_variable_get(:@options)[:out_of_src_build]).to be_true
+      end
+
+      it 'instantiates a new CMakeRunner' do
+        expect(Guard::CMake::CMakeRunner).to receive(:new).with(default_options)
+        described_class.new
       end
     end
 
