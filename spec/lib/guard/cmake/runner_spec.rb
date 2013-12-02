@@ -2,14 +2,17 @@ require 'spec_helper'
 
 describe Guard::CMake::Runner do
 
-  describe "#initialize" do
+  subject { described_class.new }
+  let(:cmake) { subject.instance_variable_get(:@cmake) }
+  let(:default_options) { { out_of_src_build: true, build_dir: 'build' } }
 
-    let(:default_options) { { out_of_src_build: true} }
+  describe "#initialize" do
 
     context "with no options" do
       it "sets default options" do
         runner = described_class.new
         expect(runner.instance_variable_get(:@options)[:out_of_src_build]).to be_true
+        expect(runner.instance_variable_get(:@options)[:build_dir]).to eq "build"
       end
 
       it 'instantiates a new CMakeRunner' do
@@ -17,15 +20,22 @@ describe Guard::CMake::Runner do
         described_class.new
       end
     end
+  end
 
-    describe ":cmd option" do
-      context "with custom cmd" do
-        let(:options) { { run_all: { cmd: 'make -j 2' } } }
-        it "builds command with custom options" do
-#          expect(Guard::RSpec::Command).to receive(:new).with(kind_of(Array), hash_including(cmd: 'rspec -t ~slow'))
-#        runner.run_all
+  describe "#run_all" do
+    context "with default options" do
+      it "builds the project directory" do
+        expect(subject).to receive(:run).with(["build"])
+        subject.run_all
       end
     end
+  end
+
+  describe "#run" do
+    it "generates makefiles in the given directories" do
+      # cmake.stub(cmake
+      # expect(
     end
   end
+
 end

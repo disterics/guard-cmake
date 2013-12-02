@@ -42,6 +42,7 @@ module Guard
     # @return [Object] the task result
     #
     def run_all
+      ::Guard::UI.info("Building the whole project")
       _throw_if_failed { runner.run_all }
     end
 

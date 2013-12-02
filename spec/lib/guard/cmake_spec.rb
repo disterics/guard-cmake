@@ -40,17 +40,22 @@ describe Guard::CMake do
 
       it "doesn't call #run_all" do
         expect(subject).to_not receive(:run_all)
-
         subject.start
       end
     end
   end
 
   describe '#run_all' do
-    # it "runs cmake and make in the default :build_dir" do
-    #   expect(runner).to receive(:run).with(["build"], message: "Building the whole project")
-    #   subject.run_all
-    # end
+    it "prints building project message" do
+      expect(Guard::UI).to receive(:info).with("Building the whole project")
+      subject.run_all
+    end
+
+    it "builds the whole project" do
+      expect(runner).to receive(:run_all)
+      runner.stub(:run_all) { true }
+      subject.run_all
+    end
   end
 
 end
