@@ -25,5 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "ruby_gntp"
+  spec.add_development_dependency "fakefs"
 
 end

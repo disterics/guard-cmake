@@ -1,4 +1,5 @@
 require 'rspec'
+require 'fakefs/spec_helpers'
 require 'guard/cmake'
 
 RSpec.configure do |config|
@@ -9,6 +10,9 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  # activate FakeFS when an example is tagged with fakefs: true
+  config.include FakeFS::SpecHelpers, fakefs: true
 
   config.before(:each) do
     # Stub all UI methods, so no visible output appears for the UI class

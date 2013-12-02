@@ -9,6 +9,8 @@ module Guard
         @project_dir = project_dir
       end
 
+      def run
+      end
     end
   end
 end
