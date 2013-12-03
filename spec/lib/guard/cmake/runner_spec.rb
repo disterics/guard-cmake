@@ -4,7 +4,7 @@ describe Guard::CMake::Runner do
 
   subject { described_class.new }
   let(:cmake) { subject.instance_variable_get(:@cmake) }
-  let(:default_options) { { out_of_src_build: true, build_dir: 'build' } }
+  let(:default_options) { { out_of_src_build: true, build_dir: 'build', project_dir: Dir.pwd } }
 
   describe "#initialize" do
 

@@ -9,7 +9,8 @@ module Guard
       def initialize(opts = {})
         @options = {
           out_of_src_build: true,
-          build_dir: 'build'
+          build_dir: 'build',
+          project_dir: Dir.pwd
         }.merge(opts)
         @cmake = CMakeRunner.new(@options)
       end
