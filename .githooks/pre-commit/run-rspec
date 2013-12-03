@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'pty'
-html_path = "rspec_results.html"
+html_path = File.join("tmp", "rspec_results.html")
 begin
   PTY.spawn( "bundle exec rspec spec --format h -o #{html_path} -f p" ) do |stdin, stdout, pid|
   begin
