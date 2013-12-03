@@ -58,4 +58,18 @@ describe Guard::CMake do
     end
   end
 
+  describe '#reload' do
+    it 'runs cmake' do
+      expect(runner).to receive(:reload).and_return(true)
+      subject.reload
+    end
+  end
+
+  describe '#run_on_changes' do
+    it 'runs make in directories with changes' do
+      expect(runner).to receive(:run).with(['src/a']).and_return(true)
+      subject.run_on_changes(['src/a/a.cpp', 'src/a/a.h'])
+    end
+  end
+
 end
