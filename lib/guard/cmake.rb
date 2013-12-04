@@ -20,7 +20,8 @@ module Guard
     def initialize(options = {})
       super
       @options = {
-        all_on_start: true
+        all_on_start: true,
+        project_dir: Dir.pwd
       }.merge(options)
       @runner = Runner.new(@options)
     end

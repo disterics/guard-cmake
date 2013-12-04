@@ -4,7 +4,7 @@ describe Guard::CMake do
 
   subject { described_class.new }
   let(:runner) { subject.instance_variable_get(:@runner) }
-  let(:default_options) { { all_on_start: true } }
+  let(:default_options) { { all_on_start: true, project_dir: Dir.pwd } }
 
   describe '#initialize' do
     it 'instantiates a new Runner' do
