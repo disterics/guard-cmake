@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Guard::CMake::Runner do
 
   subject { described_class.new }
-  let(:cmake) { subject.instance_variable_get(:@cmake) }
   let(:default_options) { { out_of_src_build: true, build_dir: 'build', project_dir: Dir.pwd } }
 
   describe "#initialize" do
@@ -16,26 +15,68 @@ describe Guard::CMake::Runner do
       end
 
       it 'instantiates a new CMakeRunner' do
-        expect(Guard::CMake::CMakeRunner).to receive(:new).with(default_options)
+        expect(Guard::CMake::CMakeRunner).to receive(:new).with(default_options[:project_dir], default_options[:build_dir])
         described_class.new
       end
+
+      it 'instantiates a new MakeRunner' do
+        expect(Guard::CMake::MakeRunner).to receive(:new).with(default_options[:project_dir], default_options[:build_dir])
+        described_class.new
+      end
+
+      it 'does not instantiate a new CTestRunner' do
+        expect(Guard::CMake::CTestRunner).to_not receive(:new)
+        described_class.new
+      end
+
     end
+
+    describe ":ctest option" do
+      context "with :ctest option set to true" do
+        it 'instantiates a new CTestRunner' do
+          expect(Guard::CMake::CTestRunner).to receive(:new).with(default_options[:project_dir], default_options[:build_dir])
+          described_class.new(ctest: true)
+        end
+      end
+
+      context "with :ctest option set to false" do
+
+        it 'does not instantiate a new CTestRunner' do
+          expect(Guard::CMake::CTestRunner).to_not receive(:new)
+          described_class.new(ctest: false)
+        end
+
+      end
+
+    end
+
   end
 
   describe "#run_all" do
+
     context "with default options" do
       it "builds the project directory" do
         expect(subject).to receive(:run).with(["build"])
         subject.run_all
       end
     end
+
   end
 
   describe "#run" do
+    let(:cmake) { subject.instance_variable_get(:@cmake) }
+    let(:make) { subject.instance_variable_get(:@make) }
+
     it "generates makefiles in the given directories" do
-      # cmake.stub(cmake
-      # expect(
+      expect(cmake).to receive(:run).exactly(1).times.and_return(true)
+      subject.run(["build"])
     end
+
+    it "it builds the given directories" do
+      expect(make).to receive(:run).with(["build"]).exactly(1).times.and_return(true)
+      subject.run(["build"])
+    end
+
   end
 
 end

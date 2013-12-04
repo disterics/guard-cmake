@@ -2,15 +2,16 @@ require 'spec_helper'
 
 describe Guard::CMake::CMakeRunner do
 
-  subject { described_class.new(default_options) }
+  subject { described_class.new(project_dir, build_dir) }
 
-  let(:default_options) { { project_dir: '/tmp/project1', build_dir: 'build' } }
+  let(:project_dir) { '/tmp/project1' }
+  let(:build_dir) { 'build' }
   let(:command) { double('command', :run => true) }
 
   describe "#initialize" do
     it "instantiates with options" do
-      expect(described_class).to receive(:new).with(default_options)
-      described_class.new(default_options)
+      expect(described_class).to receive(:new).with(project_dir, build_dir)
+      described_class.new(project_dir, build_dir)
     end
   end
 
@@ -58,8 +59,8 @@ describe Guard::CMake::CMakeRunner do
 
     context "with existing makefile", fakefs: true do
       before {
-        FileUtils.mkdir_p(File.join(default_options[:project_dir], default_options[:build_dir]))
-        FileUtils.touch(File.join(default_options[:project_dir], default_options[:build_dir], 'Makefile'))
+        FileUtils.mkdir_p(File.join(project_dir, build_dir))
+        FileUtils.touch(File.join(project_dir, build_dir, 'Makefile'))
       }
 
       it "does not instantiate a new command" do
