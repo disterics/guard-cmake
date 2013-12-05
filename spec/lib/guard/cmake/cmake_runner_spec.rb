@@ -8,6 +8,11 @@ describe Guard::CMake::CMakeRunner do
   let(:build_dir) { 'build' }
   let(:command) { double('command', :run => true) }
 
+  before {
+    allow(Kernel).to receive(:system) { true }
+    allow(Guard::CMake::CMakeCommand).to receive(:new) { 'cmake' }
+  }
+
   describe "#initialize" do
     it "instantiates with options" do
       expect(described_class).to receive(:new).with(project_dir, build_dir)

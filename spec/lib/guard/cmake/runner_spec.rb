@@ -5,6 +5,12 @@ describe Guard::CMake::Runner do
   subject { described_class.new }
   let(:default_options) { { out_of_src_build: true, build_dir: 'build', project_dir: Dir.pwd } }
 
+  before {
+    allow(Kernel).to receive(:system) { true }
+    allow(Guard::CMake::CMakeCommand).to receive(:new) { 'cmake' }
+  }
+
+
   describe "#initialize" do
 
     context "with no options" do
@@ -68,7 +74,7 @@ describe Guard::CMake::Runner do
     let(:make) { subject.instance_variable_get(:@make) }
 
     it "generates makefiles in the given directories" do
-      expect(cmake).to receive(:run).exactly(1).times.and_return(true)
+      expect(cmake).to receive(:run).once.and_return(true)
       subject.run(["build"])
     end
 

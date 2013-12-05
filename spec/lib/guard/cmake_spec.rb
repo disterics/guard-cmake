@@ -47,6 +47,7 @@ describe Guard::CMake do
 
   describe '#run_all' do
     it "prints building project message" do
+      runner.stub(:run_all) { true }
       expect(Guard::UI).to receive(:info).with("Building the whole project")
       subject.run_all
     end
