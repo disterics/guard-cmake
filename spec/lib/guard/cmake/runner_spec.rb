@@ -72,9 +72,18 @@ describe Guard::CMake::Runner do
       subject.run(["build"])
     end
 
-    it "it builds the given directories" do
+    it "builds the given directories" do
       expect(make).to receive(:run).with(["build"]).exactly(1).times.and_return(true)
       subject.run(["build"])
+    end
+
+    context "with :ctest option set to true" do
+      subject { described_class.new(ctest: true) }
+      let(:ctest) { subject.instance_variable_get(:@ctest) }
+      it 'runs tests in the given directories' do
+        expect(ctest).to receive(:run).with(["build"]).exactly(1).times.and_return(true)
+        subject.run(["build"])
+      end
     end
 
   end

@@ -5,6 +5,9 @@ module Guard
 
     class CTestRunner < CommandRunner
 
+      def run(paths)
+        paths
+      end
 
     end
   end

@@ -24,8 +24,10 @@ module Guard
       end
 
       def run(paths)
-        @cmake.run
-        @make.run(paths)
+        result = @cmake.run
+        result = @make.run(paths) if result
+        result = @ctest.run(paths) if result && @ctest
+        result
       end
 
     end
