@@ -1,0 +1,8 @@
+#
+# CMake Guardfile
+#
+guard :cmake do
+	watch(%r{((.+\.)(cpp|C|cxx|cc|hpp|hxx|H|h)$)})
+	watch(%r{(.+)?\/CMakeLists.txt$})
+#    watch(%r{((.+)\.c$)|((.+)\.h$)|((M|m)akefile$)} )
+end
