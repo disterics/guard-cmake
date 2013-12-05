@@ -11,6 +11,8 @@ describe Guard::CMake::CMakeRunner do
   before {
     allow(Kernel).to receive(:system) { true }
     allow(Guard::CMake::CMakeCommand).to receive(:new) { 'cmake' }
+    allow(Guard::Notifier).to receive(:notify) { true }
+    allow(Dir).to receive(:chdir) { true }
   }
 
   describe "#initialize" do
@@ -60,6 +62,12 @@ describe Guard::CMake::CMakeRunner do
         subject.run
       end
     end
+
+    it "runs command in build directory" do
+      expect(Dir).to receive(:chdir).with(File.join(project_dir, build_dir))
+      subject.run
+    end
+
   end
 
 end

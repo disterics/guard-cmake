@@ -31,12 +31,18 @@ module Guard
 
       def _run(all)
         command = CMakeCommand.new(@project_dir)
-        Kernel.system(command).tap do | success |
+        _in_build_dir { Kernel.system(command) }.tap do | success |
           if success
             ::Guard::Notifier.notify('Success', title: TITLE, image: :success, priority: -2)
           else
             ::Guard::Notifier.notify('Failed', title: TITLE, image: :failed, priority: 2)
           end
+        end
+      end
+
+      def _in_build_dir
+        Dir.chdir(@build_dir) do
+          yield
         end
       end
 

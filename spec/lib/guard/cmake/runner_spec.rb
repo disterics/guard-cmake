@@ -1,15 +1,17 @@
 require 'spec_helper'
 
-describe Guard::CMake::Runner do
+describe Guard::CMake::Runner, fakefs: true do
 
   subject { described_class.new }
   let(:default_options) { { out_of_src_build: true, build_dir: 'build', project_dir: Dir.pwd } }
+  let(:cmake_instance) { double(Guard::CMake::MakeRunner) }
 
   before {
     allow(Kernel).to receive(:system) { true }
     allow(Guard::CMake::CMakeCommand).to receive(:new) { 'cmake' }
+    allow(Guard::CMake::CMakeRunner).to receive(:new) { cmake_instance }
+    allow(cmake_instance).to receive(:run) { true }
   }
-
 
   describe "#initialize" do
 
@@ -34,7 +36,6 @@ describe Guard::CMake::Runner do
         expect(Guard::CMake::CTestRunner).to_not receive(:new)
         described_class.new
       end
-
     end
 
     describe ":ctest option" do
@@ -46,16 +47,20 @@ describe Guard::CMake::Runner do
       end
 
       context "with :ctest option set to false" do
-
         it 'does not instantiate a new CTestRunner' do
           expect(Guard::CMake::CTestRunner).to_not receive(:new)
           described_class.new(ctest: false)
         end
-
       end
-
     end
 
+    context 'with missing build directory' do
+      it 'creates build directory' do
+        expect(File.directory?(default_options[:build_dir])).to be_false
+        described_class.new
+        expect(File.directory?(default_options[:build_dir])).to be_true
+      end
+    end
   end
 
   describe "#run_all" do

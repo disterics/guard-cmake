@@ -14,6 +14,7 @@ module Guard
           build_dir: 'build',
           project_dir: Dir.pwd
         }.merge(opts)
+        _setup
         @cmake = CMakeRunner.new(options[:project_dir], options[:build_dir])
         @make = MakeRunner.new(options[:project_dir], options[:build_dir])
         @ctest = CTestRunner.new(options[:project_dir], options[:build_dir]) if options[:ctest]
@@ -30,6 +31,13 @@ module Guard
         result
       end
 
+      private
+
+      def _setup
+        unless File.directory?(@options[:build_dir])
+          FileUtils.mkpath(@options[:build_dir])
+        end
+      end
     end
   end
 end
