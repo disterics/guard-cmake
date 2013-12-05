@@ -7,17 +7,17 @@ module Guard
 
       require 'guard/cmake/cmake_command'
 
+      TITLE = 'CMake results'
+
       attr_reader :options
 
       def run_all
-        command = CMakeCommand.new(@build_dir, @project_dir)
-        command.run
+        _run(true)
       end
 
       def run
         unless makefile_exists?
-          command = CMakeCommand.new(@build_dir, @project_dir)
-          command.run
+          _run(false)
         end
         true
       end
@@ -28,6 +28,18 @@ module Guard
         makefile = File.join(@build_dir, 'Makefile')
         File.file?(makefile)
       end
+
+      def _run(all)
+        command = CMakeCommand.new(@project_dir)
+        Kernel.system(command).tap do | success |
+          if success
+            ::Guard::Notifier.notify('Success', title: TITLE, image: :success, priority: -2)
+          else
+            ::Guard::Notifier.notify('Failed', title: TITLE, image: :failed, priority: 2)
+          end
+        end
+      end
+
     end
   end
 end

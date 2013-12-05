@@ -17,27 +17,20 @@ describe Guard::CMake::CMakeRunner do
 
   describe "#run_all" do
     context "with no existing makefile" do
-      it "instantiates a new command" do
-        expect(Guard::CMake::CMakeCommand).to receive(:new).exactly(1).times.and_return(command)
-        subject.run_all
-      end
-
-      it "runs the command" do
-        Guard::CMake::CMakeCommand.stub(:new) { command }
-        expect(command).to receive(:run).exactly(1).times
+      it "builds command with project dir" do
+        expect(Guard::CMake::CMakeCommand).to receive(:new).with(project_dir).exactly(1).times.and_return(command)
         subject.run_all
       end
     end
 
-    context "with existing makefile" do
-      it "instantiates a new command" do
-        expect(Guard::CMake::CMakeCommand).to receive(:new).exactly(1).times.and_return(command)
-        subject.run_all
-      end
+    context "with existing makefile", fakefs: true do
+      before {
+        FileUtils.mkdir_p(File.join(project_dir, build_dir))
+        FileUtils.touch(File.join(project_dir, build_dir, 'Makefile'))
+      }
 
-      it "runs the command" do
-        Guard::CMake::CMakeCommand.stub(:new) { command }
-        expect(command).to receive(:run).exactly(1).times
+      it "builds command with project dir" do
+        expect(Guard::CMake::CMakeCommand).to receive(:new).with(project_dir).exactly(1).times.and_return(command)
         subject.run_all
       end
     end
@@ -45,14 +38,8 @@ describe Guard::CMake::CMakeRunner do
 
   describe "#run" do
     context "with no existing makefile" do
-      it "instantiates a new command" do
-        expect(Guard::CMake::CMakeCommand).to receive(:new).exactly(1).times.and_return(command)
-        subject.run
-      end
-
-      it "runs the command" do
-        Guard::CMake::CMakeCommand.stub(:new) { command }
-        expect(command).to receive(:run).exactly(1).times
+      it "builds command with project dir" do
+        expect(Guard::CMake::CMakeCommand).to receive(:new).with(project_dir).exactly(1).times.and_return(command)
         subject.run
       end
     end
@@ -63,7 +50,7 @@ describe Guard::CMake::CMakeRunner do
         FileUtils.touch(File.join(project_dir, build_dir, 'Makefile'))
       }
 
-      it "does not instantiate a new command" do
+      it "does not build command" do
         expect(Guard::CMake::CMakeCommand).to_not receive(:new)
         subject.run
       end
