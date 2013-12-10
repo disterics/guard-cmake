@@ -4,9 +4,11 @@ module Guard
   class CMake
     class CMakeCommand < Command
 
+      TITLE = 'CMake results'
+
       def initialize(project_dir)
         @project_dir = project_dir
-        super(_parts.join(' '))
+        super(TITLE, _parts.join(' '))
       end
 
       private

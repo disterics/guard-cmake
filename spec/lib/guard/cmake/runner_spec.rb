@@ -8,6 +8,7 @@ describe Guard::CMake::Runner, fakefs: true do
 
   before {
     allow(Kernel).to receive(:system) { true }
+    allow(Dir).to receive(:chdir) { true }
     allow(Guard::CMake::CMakeCommand).to receive(:new) { 'cmake' }
     allow(Guard::CMake::CMakeRunner).to receive(:new) { cmake_instance }
     allow(cmake_instance).to receive(:run) { true }

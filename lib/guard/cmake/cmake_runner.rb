@@ -7,8 +7,6 @@ module Guard
 
       require 'guard/cmake/cmake_command'
 
-      TITLE = 'CMake results'
-
       attr_reader :options
 
       def run_all
@@ -31,19 +29,7 @@ module Guard
 
       def _run(all)
         command = CMakeCommand.new(@project_dir)
-        _in_build_dir { Kernel.system(command) }.tap do | success |
-          if success
-            ::Guard::Notifier.notify('Success', title: TITLE, image: :success, priority: -2)
-          else
-            ::Guard::Notifier.notify('Failed', title: TITLE, image: :failed, priority: 2)
-          end
-        end
-      end
-
-      def _in_build_dir
-        Dir.chdir(@build_dir) do
-          yield
-        end
+        _execute(command)
       end
 
     end

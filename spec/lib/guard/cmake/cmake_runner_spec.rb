@@ -6,11 +6,11 @@ describe Guard::CMake::CMakeRunner do
 
   let(:project_dir) { '/tmp/project1' }
   let(:build_dir) { 'build' }
-  let(:command) { double('command', :run => true) }
+  let(:command) { double('command', :title => 'command' ) }
 
   before {
     allow(Kernel).to receive(:system) { true }
-    allow(Guard::CMake::CMakeCommand).to receive(:new) { 'cmake' }
+    allow(Guard::CMake::CMakeCommand).to receive(:new) { command }
     allow(Guard::Notifier).to receive(:notify) { true }
     allow(Dir).to receive(:chdir) { true }
   }
