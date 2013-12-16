@@ -6,18 +6,20 @@ module Guard
       require 'guard/cmake/ctest_runner'
       require 'guard/cmake/make_runner'
 
+      DEFAULT_OPTS = {
+        build_dir: 'build',
+        ctest: false,
+        out_of_src_build: true,
+        project_dir: Dir.pwd
+      }
+
       attr_reader :options
 
       def initialize(opts = {})
-        @options = {
-          out_of_src_build: true,
-          build_dir: 'build',
-          project_dir: Dir.pwd
-        }.merge(opts)
-        _setup
+        extra_opts = _setup({project_dir: Dir.pwd}.merge(opts))
         @cmake = CMakeRunner.new(options[:project_dir], options[:build_dir])
         @make = MakeRunner.new(options[:project_dir], options[:build_dir])
-        @ctest = CTestRunner.new(options[:project_dir], options[:build_dir]) if options[:ctest]
+        @ctest = CTestRunner.new(options[:project_dir], options[:build_dir], extra_opts) if options[:ctest]
       end
 
       def run_all
@@ -35,10 +37,19 @@ module Guard
 
       private
 
-      def _setup
+      def _setup(opts)
+
+        @options = DEFAULT_OPTS.merge(opts)
+
+        keys = DEFAULT_OPTS.keys
+        unused = opts.reject do | k |
+          keys.include?(k)
+        end
+
         unless File.directory?(@options[:build_dir])
           FileUtils.mkpath(@options[:build_dir])
         end
+        unused
       end
     end
   end

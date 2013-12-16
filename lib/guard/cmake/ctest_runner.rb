@@ -32,6 +32,18 @@ module Guard
         _execute(command)
       end
 
+      def _clean_paths(paths)
+        clean_paths = super
+        if @options[:ctest_prefix]
+          clean_paths.map! do |path|
+            parts = path.split(File::SEPARATOR)
+            parts[0] = @options[:ctest_prefix]
+            File.join(parts)
+          end
+        end
+        clean_paths
+      end
+
     end
   end
 end

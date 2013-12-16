@@ -51,6 +51,21 @@ describe Guard::CMake::CTestRunner do
       expect(Dir).to receive(:chdir).with(full_build_path)
       subject.run(paths)
     end
+
+    context "with :ctest_prefix option" do
+      subject { described_class.new(project_dir, build_dir, options) }
+
+      let(:options) {{ctest_prefix: 'test'}}
+      let (:test_paths) { %w[test/path1 test/path2] }
+
+      it "builds command with each directory prefixed with :ctest_prefix one level deep" do
+        expect(Guard::CMake::CTestCommand).to receive(:new).with(test_paths[0]).ordered.and_return(command)
+        expect(Guard::CMake::CTestCommand).to receive(:new).with(test_paths[1]).ordered.and_return(command)
+        subject.run(paths)
+      end
+
+    end
+
   end
 
 end

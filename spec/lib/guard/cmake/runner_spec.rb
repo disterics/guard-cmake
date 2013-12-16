@@ -8,7 +8,6 @@ describe Guard::CMake::Runner, fakefs: true do
   let(:ctest_instance) { double(Guard::CMake::CTestRunner) }
   let(:default_options) { { out_of_src_build: true, build_dir: 'build', project_dir: Dir.pwd } }
 
-
   before {
     allow(Kernel).to receive(:system) { true }
     allow(Dir).to receive(:chdir) { true }
@@ -26,6 +25,7 @@ describe Guard::CMake::Runner, fakefs: true do
         runner = described_class.new
         expect(runner.instance_variable_get(:@options)[:out_of_src_build]).to be_true
         expect(runner.instance_variable_get(:@options)[:build_dir]).to eq "build"
+        expect(runner.instance_variable_get(:@options)[:ctest]).to be_false
       end
 
       it 'instantiates a new CMakeRunner' do
@@ -44,12 +44,21 @@ describe Guard::CMake::Runner, fakefs: true do
       end
     end
 
+    context 'with missing build directory' do
+      it 'creates build directory' do
+        expect(File.directory?(default_options[:build_dir])).to be_false
+        described_class.new
+        expect(File.directory?(default_options[:build_dir])).to be_true
+      end
+    end
+
     describe ":ctest option" do
       context "with :ctest option set to true" do
         it 'instantiates a new CTestRunner' do
-          expect(Guard::CMake::CTestRunner).to receive(:new).with(default_options[:project_dir], default_options[:build_dir])
+          expect(Guard::CMake::CTestRunner).to receive(:new).with(default_options[:project_dir], default_options[:build_dir], {})
           described_class.new(ctest: true)
         end
+
       end
 
       context "with :ctest option set to false" do
@@ -60,13 +69,16 @@ describe Guard::CMake::Runner, fakefs: true do
       end
     end
 
-    context 'with missing build directory' do
-      it 'creates build directory' do
-        expect(File.directory?(default_options[:build_dir])).to be_false
-        described_class.new
-        expect(File.directory?(default_options[:build_dir])).to be_true
+    describe ":ctest_prefix option" do
+      let(:ctest_options) {{ctest_prefix: 'test'}}
+      context "with :ctest option set to true" do
+        it 'instantiates ctest runner with ctest_prefix' do
+          expect(Guard::CMake::CTestRunner).to receive(:new).with(default_options[:project_dir], default_options[:build_dir], ctest_options)
+          described_class.new(ctest: true, ctest_prefix: 'test')
+        end
       end
     end
+
   end
 
   describe "#run_all" do
