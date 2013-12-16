@@ -21,7 +21,9 @@ module Guard
       end
 
       def run_all
-        run([@options[:build_dir]])
+        result = @cmake.run
+        result = @make.run_all if result
+        result = @ctest.run_all if result && @ctest
       end
 
       def run(paths)

@@ -8,8 +8,7 @@ module Guard
       require 'guard/cmake/ctest_command'
 
       def run_all
-        CTestCommand.new(nil)
-        _in_build_dir { true }
+        _run(true)
       end
 
       def run(paths)

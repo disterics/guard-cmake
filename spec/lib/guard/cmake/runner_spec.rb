@@ -3,15 +3,20 @@ require 'spec_helper'
 describe Guard::CMake::Runner, fakefs: true do
 
   subject { described_class.new }
-  let(:default_options) { { out_of_src_build: true, build_dir: 'build', project_dir: Dir.pwd } }
+
   let(:cmake_instance) { double(Guard::CMake::MakeRunner) }
+  let(:ctest_instance) { double(Guard::CMake::CTestRunner) }
+  let(:default_options) { { out_of_src_build: true, build_dir: 'build', project_dir: Dir.pwd } }
+
 
   before {
     allow(Kernel).to receive(:system) { true }
     allow(Dir).to receive(:chdir) { true }
     allow(Guard::CMake::CMakeCommand).to receive(:new) { 'cmake' }
     allow(Guard::CMake::CMakeRunner).to receive(:new) { cmake_instance }
+    allow(Guard::CMake::CTestRunner).to receive(:new) { ctest_instance }
     allow(cmake_instance).to receive(:run) { true }
+    allow(ctest_instance).to receive(:run) { true }
   }
 
   describe "#initialize" do
@@ -65,12 +70,32 @@ describe Guard::CMake::Runner, fakefs: true do
   end
 
   describe "#run_all" do
+    let(:cmake) { subject.instance_variable_get(:@cmake) }
+    let(:make) { subject.instance_variable_get(:@make) }
 
     context "with default options" do
-      it "builds the project directory" do
-        expect(subject).to receive(:run).with(["build"])
+
+      it "generates makefiles in the build directory" do
+        expect(cmake).to receive(:run)
         subject.run_all
       end
+
+      it "builds the project directory" do
+        expect(make).to receive(:run_all).once.and_return(true)
+        subject.run_all
+      end
+
+    end
+
+    context "with :ctest option set to true" do
+      subject { described_class.new(ctest: true) }
+      let(:ctest) { subject.instance_variable_get(:@ctest) }
+
+      it 'runs tests in the build directory' do
+        expect(ctest).to receive(:run_all).exactly(1).times.and_return(true)
+        subject.run_all
+      end
+
     end
 
   end
