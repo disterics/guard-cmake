@@ -31,13 +31,6 @@ module Guard
         _execute(command)
       end
 
-      def _clean_paths(paths)
-        clean_paths = paths.collect do | path |
-          File.dirname(path)
-        end
-        clean_paths.uniq
-      end
-
     end
   end
 end

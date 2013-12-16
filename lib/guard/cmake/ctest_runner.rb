@@ -5,8 +5,32 @@ module Guard
 
     class CTestRunner < CommandRunner
 
+      require 'guard/cmake/ctest_command'
+
+      def run_all
+        CTestCommand.new(nil)
+        _in_build_dir { true }
+      end
+
       def run(paths)
-        paths
+        _run(false, paths)
+      end
+
+      private
+
+      def _run(all, paths = [])
+        unless all
+          _clean_paths(paths).collect do |path|
+            _ctest(path)
+          end
+        else
+          _ctest(nil)
+        end
+      end
+
+      def _ctest(path)
+        command = CTestCommand.new(path)
+        _execute(command)
       end
 
     end

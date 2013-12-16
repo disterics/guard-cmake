@@ -16,6 +16,13 @@ module Guard
         end
       end
 
+      def _clean_paths(paths)
+        clean_paths = paths.collect do | path |
+          File.dirname(path)
+        end
+        clean_paths.uniq
+      end
+
       def _execute(command)
         _in_build_dir { Kernel.system(command) }.tap do | success |
           if success
