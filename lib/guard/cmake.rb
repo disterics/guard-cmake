@@ -6,6 +6,7 @@ module Guard
 
 
     require 'guard/cmake/runner'
+    require 'guard/cmake/version'
 
     attr_accessor :runner
 

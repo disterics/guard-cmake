@@ -1,4 +1,4 @@
-Copyright (c) 2013 disterics
+Copyright (c) 2013 Henry Barnor
 
 MIT License
 
