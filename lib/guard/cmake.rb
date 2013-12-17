@@ -54,7 +54,6 @@ module Guard
      # @return [Object] the task result
      #
      def reload
-      _throw_if_failed { runner.reload }
      end
 
     # Default behaviour on file(s) changes that the Guard plugin watches.
@@ -63,9 +62,7 @@ module Guard
     # @return [Object] the task result
     #
     def run_on_changes(paths)
-      dirs = paths.collect { |p| File.dirname(p) }
-      dirs.uniq!
-      _throw_if_failed { runner.run(dirs) }
+      _throw_if_failed { runner.run(paths) }
     end
 
     private
