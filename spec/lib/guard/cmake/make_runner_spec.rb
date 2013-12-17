@@ -49,6 +49,21 @@ describe Guard::CMake::MakeRunner do
       expect(Dir).to receive(:chdir).with(full_build_path)
       subject.run(paths)
     end
+
+    context "with missing target folder", fakefs: true do
+
+      let(:paths) { %w[src/path3/a.cpp src/path4/b.h] }
+
+      before {
+        FileUtils.makedirs(full_build_path)
+      }
+
+      it "does not create commands for missing target directories" do
+        expect(Guard::CMake::MakeCommand).to_not receive(:new)
+        subject.run(paths)
+      end
+    end
+
   end
 
 end

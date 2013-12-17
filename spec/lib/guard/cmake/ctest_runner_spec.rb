@@ -60,8 +60,8 @@ describe Guard::CMake::CTestRunner do
       let (:test_paths) { %w[test/path1 test/path2] }
 
       before {
-        FileUtils.makedirs(test_paths)
-        allow(Dir).to receive(:chdir) { true }
+        FileUtils.makedirs(full_build_path)
+        Dir.chdir(full_build_path) { FileUtils.makedirs(test_paths) }
       }
 
       it "creates command with each directory prefixed with :ctest_prefix one level deep" do

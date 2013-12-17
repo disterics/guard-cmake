@@ -31,6 +31,14 @@ module Guard
         _execute(command)
       end
 
+      def _clean_paths(paths)
+        dirs = _get_directories(paths)
+        dirs.map! do | dir |
+          dir if _exists_in_build_dir?(dir)
+        end
+        dirs.compact
+      end
+
     end
   end
 end

@@ -16,7 +16,13 @@ module Guard
         end
       end
 
-      def _clean_paths(paths)
+      def _exists_in_build_dir?(dir)
+        Dir.chdir(@build_dir) do
+          File.directory?(dir)
+        end
+      end
+
+      def _get_directories(paths)
         clean_paths = paths.collect do | path |
           File.dirname(path)
         end

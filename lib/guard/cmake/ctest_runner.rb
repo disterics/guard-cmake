@@ -33,15 +33,15 @@ module Guard
       end
 
       def _clean_paths(paths)
-        clean_paths = super
+        dirs = _get_directories(paths)
         if @options[:ctest_prefix]
-          clean_paths.map! do |path|
-            parts = path.split(File::SEPARATOR)
-            dir = File.join(@options[:ctest_prefix], parts[1..-1])
-            dir if File.directory?(dir)
+          dirs.map! do | dir |
+            parts = dir.split(File::SEPARATOR)
+            test_dir = File.join(@options[:ctest_prefix], parts[1..-1])
+            test_dir if _exists_in_build_dir?(test_dir)
           end
         end
-        clean_paths.compact
+        dirs.compact
       end
 
     end
