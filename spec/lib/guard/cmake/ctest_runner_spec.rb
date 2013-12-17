@@ -52,16 +52,31 @@ describe Guard::CMake::CTestRunner do
       subject.run(paths)
     end
 
-    context "with :ctest_prefix option" do
+    context "with :ctest_prefix option", fakefs: true do
+
       subject { described_class.new(project_dir, build_dir, options) }
 
       let(:options) {{ctest_prefix: 'test'}}
       let (:test_paths) { %w[test/path1 test/path2] }
 
-      it "builds command with each directory prefixed with :ctest_prefix one level deep" do
+      before {
+        FileUtils.makedirs(test_paths)
+        allow(Dir).to receive(:chdir) { true }
+      }
+
+      it "creates command with each directory prefixed with :ctest_prefix one level deep" do
         expect(Guard::CMake::CTestCommand).to receive(:new).with(test_paths[0]).ordered.and_return(command)
         expect(Guard::CMake::CTestCommand).to receive(:new).with(test_paths[1]).ordered.and_return(command)
         subject.run(paths)
+      end
+
+      context "with missing target folder" do
+        let(:paths) { %w[src/path3/a.cpp src/path4/b.h] }
+
+        it "does not create commands for missing target directories" do
+          expect(Guard::CMake::CTestCommand).to_not receive(:new)
+          subject.run(paths)
+        end
       end
 
     end

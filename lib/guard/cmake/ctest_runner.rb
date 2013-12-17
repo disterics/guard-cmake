@@ -37,11 +37,11 @@ module Guard
         if @options[:ctest_prefix]
           clean_paths.map! do |path|
             parts = path.split(File::SEPARATOR)
-            parts[0] = @options[:ctest_prefix]
-            File.join(parts)
+            dir = File.join(@options[:ctest_prefix], parts[1..-1])
+            dir if File.directory?(dir)
           end
         end
-        clean_paths
+        clean_paths.compact
       end
 
     end
