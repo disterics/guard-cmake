@@ -26,9 +26,11 @@ module Guard
         result = @cmake.run_all
         result = @make.run_all if result
         result = @ctest.run_all if result && @ctest
+        result
       end
 
       def run(paths)
+        ::Guard::UI.debug("Run plugin for #{paths}")
         result = @cmake.run(paths)
         result = @make.run(paths) if result
         result = @ctest.run(paths) if result && @ctest

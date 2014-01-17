@@ -11,6 +11,7 @@ module Guard
       end
 
       def run(paths)
+        ::Guard::UI.debug("Run make for #{paths}")
         _run(false, paths)
       end
 

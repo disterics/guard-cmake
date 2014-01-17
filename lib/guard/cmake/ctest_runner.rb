@@ -13,6 +13,7 @@ module Guard
       end
 
       def run(paths)
+        ::Guard::UI.debug("Run ctest for #{paths}")
         _run(false, paths)
       end
 

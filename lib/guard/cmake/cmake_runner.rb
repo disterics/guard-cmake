@@ -14,8 +14,10 @@ module Guard
       end
 
       def run(paths)
+        ::Guard::UI.debug("Run cmake for #{paths}")
         result = true
         result = _run(false) if run_cmake?(paths)
+        result
       end
 
       private
