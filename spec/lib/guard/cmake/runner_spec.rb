@@ -16,6 +16,7 @@ describe Guard::CMake::Runner, fakefs: true do
     allow(Guard::CMake::CTestRunner).to receive(:new) { ctest_instance }
     allow(cmake_instance).to receive(:run) { true }
     allow(ctest_instance).to receive(:run) { true }
+    allow(cmake_instance).to receive(:run_all) { true }
   }
 
   describe "#initialize" do
@@ -88,7 +89,7 @@ describe Guard::CMake::Runner, fakefs: true do
     context "with default options" do
 
       it "generates makefiles in the build directory" do
-        expect(cmake).to receive(:run)
+        expect(cmake).to receive(:run_all)
         subject.run_all
       end
 

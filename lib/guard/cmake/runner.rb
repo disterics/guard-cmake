@@ -23,7 +23,7 @@ module Guard
       end
 
       def run_all
-        result = @cmake.run
+        result = @cmake.run_all
         result = @make.run_all if result
         result = @ctest.run_all if result && @ctest
       end
